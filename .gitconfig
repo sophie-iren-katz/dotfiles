@@ -1,0 +1,15 @@
+[user]
+	name = Sophie Katz
+	email = sophie@sophiekatz.us
+
+[core]
+    sshCommand = ssh -i ~/.ssh/id_ed25519_personal
+
+[includeIf "gitdir:~/Code/karaconnect/"]
+    path = ~/.gitconfig-karaconnect
+
+[diff]
+    tool = cursor
+
+[difftool "cursor"]
+    cmd = cursor --wait --reuse-window --diff $LOCAL $REMOTE
