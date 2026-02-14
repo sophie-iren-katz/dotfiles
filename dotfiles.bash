@@ -43,8 +43,18 @@ case "${1}" in
         cp -v ~/.config/kitty/kitty.conf "${DOTFILES_DIR}/.config/kitty/kitty.conf"
         cp -v ~/.config/mpv/mpv.conf "${DOTFILES_DIR}/.config/mpv/mpv.conf"
         cp -v ~/.config/starship.toml "${DOTFILES_DIR}/.config/starship.toml"
+
+        # Notify the user what to do next
+        echo
+        echo "$ cd ${DOTFILES_DIR}"
+        echo "$ git add -A ."
+        echo "$ git commit -m \"<message>\""
+        echo "$ git push"
         ;;
     load)
+        # Make sure to pull latest
+        git pull
+
         # Make directories if needed
         mkdir -p "${HOME}/.config/kitty"
         mkdir -p "${HOME}/.config/mpv"
