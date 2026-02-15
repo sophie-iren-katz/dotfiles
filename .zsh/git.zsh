@@ -274,19 +274,20 @@ function gsend {
 
 # Diff changes in current repository using Cursor
 function gdiff {
+    local pattern="${1:-}"
+    local root_dir="$(git rev-parse --show-toplevel)"
+
     # Find relevant files
     local files=()
-    for pattern in "$@"; do
-        files+=($(git ls-files --cached --others --exclude-standard | grep -E "$pattern"))
-    done
+    if [[ -n "${pattern}" ]]; then
+        files+=($(cd "${root_dir}" && git status --porcelain --untracked-files=all | sed -E 's/^[ MAD]* +//' | grep -E "${pattern}"))
 
-    # Show warning if in subdirectory
-    if [[ "$(git rev-parse --show-toplevel)" != "$(pwd)" ]]; then
-        printf "\033[1;33mwarning:\033[0;0m only showing diff for files in the current directory, not the entire repository.\n"
-
-        if [[ ${#files[@]} -gt 0 ]]; then
-            echo
+        if [[ ${#files[@]} -eq 0 ]]; then
+            printf "\033[1;31merror:\033[0;0m no files found matching pattern ${pattern}\n"
+            return 1
         fi
+    else
+        files+=($(cd "${root_dir}" && git status --porcelain --untracked-files=all | sed -E 's/^[ MAD]* +//'))
     fi
 
     if [[ ${#files[@]} -gt 0 ]]; then
@@ -294,7 +295,9 @@ function gdiff {
         for file in "${files[@]}"; do
             echo "  $file"
         done
-    fi
 
-    git difftool --no-prompt -- "${files[@]}"
+        (cd "${root_dir}" && git difftool --no-prompt -- "${files[@]}")
+    else
+        (cd "${root_dir}" && git difftool --no-prompt)
+    fi
 }
