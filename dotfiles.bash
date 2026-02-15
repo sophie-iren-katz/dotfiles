@@ -34,6 +34,8 @@ case "${1}" in
         # Make directories if needed
         mkdir -p "${DOTFILES_DIR}/.config/kitty"
         mkdir -p "${DOTFILES_DIR}/.config/mpv"
+        mkdir -p "${DOTFILES_DIR}/.zsh"
+        mkdir -p "${DOTFILES_DIR}/.zsh/completions"
 
         # Copy files from filesystem into the dotfiles repo
         cp -v ~/.zshrc "${DOTFILES_DIR}/.zshrc"
@@ -43,6 +45,13 @@ case "${1}" in
         cp -v ~/.config/kitty/kitty.conf "${DOTFILES_DIR}/.config/kitty/kitty.conf"
         cp -v ~/.config/mpv/mpv.conf "${DOTFILES_DIR}/.config/mpv/mpv.conf"
         cp -v ~/.config/starship.toml "${DOTFILES_DIR}/.config/starship.toml"
+        cp -v ~/.zsh/bitch.zsh "${DOTFILES_DIR}/.zsh/bitch.zsh"
+        cp -v ~/.zsh/dotfiles.zsh "${DOTFILES_DIR}/.zsh/dotfiles.zsh"
+        cp -v ~/.zsh/git.zsh "${DOTFILES_DIR}/.zsh/git.zsh"
+        cp -v ~/.zsh/completions/_gadd "${DOTFILES_DIR}/.zsh/completions/_gadd"
+        cp -v ~/.zsh/completions/_gsta "${DOTFILES_DIR}/.zsh/completions/_gsta"
+        cp -v ~/.zsh/completions/_gsub "${DOTFILES_DIR}/.zsh/completions/_gsub"
+        cp -v ~/.zsh/completions/_gunadd "${DOTFILES_DIR}/.zsh/completions/_gunadd"
 
         # Notify the user what to do next
         echo
@@ -58,6 +67,8 @@ case "${1}" in
         # Make directories if needed
         mkdir -p "${HOME}/.config/kitty"
         mkdir -p "${HOME}/.config/mpv"
+        mkdir -p "${HOME}/.zsh"
+        mkdir -p "${HOME}/.zsh/completions"
 
         # Copy files from dotfiles repo into the filesystem
         cp -v "${DOTFILES_DIR}/.zshrc" "${HOME}/.zshrc"
@@ -67,6 +78,13 @@ case "${1}" in
         cp -v "${DOTFILES_DIR}/.config/kitty/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
         cp -v "${DOTFILES_DIR}/.config/mpv/mpv.conf" "${HOME}/.config/mpv/mpv.conf"
         cp -v "${DOTFILES_DIR}/.config/starship.toml" "${HOME}/.config/starship.toml"
+        cp -v "${DOTFILES_DIR}/.zsh/bitch.zsh" "${HOME}/.zsh/bitch.zsh"
+        cp -v "${DOTFILES_DIR}/.zsh/dotfiles.zsh" "${HOME}/.zsh/dotfiles.zsh"
+        cp -v "${DOTFILES_DIR}/.zsh/git.zsh" "${HOME}/.zsh/git.zsh"
+        cp -v "${DOTFILES_DIR}/.zsh/completions/_gadd" "${HOME}/.zsh/completions/_gadd"
+        cp -v "${DOTFILES_DIR}/.zsh/completions/_gsta" "${HOME}/.zsh/completions/_gsta"
+        cp -v "${DOTFILES_DIR}/.zsh/completions/_gsub" "${HOME}/.zsh/completions/_gsub"
+        cp -v "${DOTFILES_DIR}/.zsh/completions/_gunadd" "${HOME}/.zsh/completions/_gunadd"
         ;;
     *)
         echo "error: invalid command ${1}"

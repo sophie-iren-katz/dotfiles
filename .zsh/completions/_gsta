@@ -1,0 +1,10 @@
+#compdef _gsta gsta
+
+function _gsta {
+    _arguments \
+        '--all[Show all changes]' \
+        '--only-added[Show only added changes]' \
+        '--only-unadded[Show only unadded changes]' \
+        '-h, --help[Show this help message and exit]' \
+        '*::arg:->args'
+}

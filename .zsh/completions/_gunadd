@@ -1,0 +1,14 @@
+#compdef _gunadd gunadd
+
+function _gunadd {
+    local state
+
+    _arguments \
+        '*::change:->changes'
+
+    case "${state}" in
+        changes)
+            compadd -S '' $(gsta --only-added)
+            ;;
+    esac
+}

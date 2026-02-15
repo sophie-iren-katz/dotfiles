@@ -1,0 +1,11 @@
+#compdef _gsub gsub
+
+function _gsub {
+    _arguments \
+        '--all[Show all submodules color coded by status (default)]' \
+        '--dirty[Show only dirty submodules]' \
+        '--clean[Show only clean submodules]' \
+        '--skip-root[Do not show the root repository as a submodule]' \
+        '-h, --help[Show this help message and exit]' \
+        '*::arg:->args'
+}
