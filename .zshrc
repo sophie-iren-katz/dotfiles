@@ -62,6 +62,9 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 # bun completions
 [ -s "/Users/sophie/.bun/_bun" ] && source "/Users/sophie/.bun/_bun"
 
+# Claude accounts
+alias claude-karaconnect="CLAUDE_CONFIG_DIR=~/.claude-karaconnect claude"
+
 # Keybindings
 bindkey "^[^[[C" forward-word
 bindkey "^[^[[D" backward-word
@@ -69,3 +72,7 @@ bindkey '\e[H'  beginning-of-line
 bindkey '\eOH'  beginning-of-line
 bindkey '\e[F'  end-of-line
 bindkey '\eOF'  end-of-line
+
+# Keys
+export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"
+
