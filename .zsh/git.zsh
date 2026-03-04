@@ -407,3 +407,23 @@ function ghlog {
         esac
     fi
 }
+
+function gh {
+    local currently_logged_in_as_kara=false
+    if [[ -n "$(/opt/homebrew/bin/gh auth status --active --json hosts | jq -r '.hosts["github.com"] | .[].login' | grep -i sophie-katz-kara)" ]]; then
+        currently_logged_in_as_kara=true
+    fi
+
+    local current_repository_is_kara=false
+    if [[ -n "$(git remote get-url origin | grep -i karaconnect)" ]]; then
+        current_repository_is_kara=true
+    fi
+
+    if [[ "${currently_logged_in_as_kara}" == "true" ]] && [[ "${current_repository_is_kara}" == "false" ]]; then
+        /opt/homebrew/bin/gh auth switch --user sophie-iren-katz
+    elif [[ "${currently_logged_in_as_kara}" == "false" ]] && [[ "${current_repository_is_kara}" == "true" ]]; then
+        /opt/homebrew/bin/gh auth switch --user sophie-katz-kara
+    fi
+
+    /opt/homebrew/bin/gh "$@"
+}

@@ -62,6 +62,12 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 # bun completions
 [ -s "/Users/sophie/.bun/_bun" ] && source "/Users/sophie/.bun/_bun"
 
+# thefuck
+eval $(thefuck --alias)
+
+# zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
 # Claude accounts
 alias claude-karaconnect="CLAUDE_CONFIG_DIR=~/.claude-karaconnect claude"
 

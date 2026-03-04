@@ -39,6 +39,7 @@ case "${1}" in
 
         # Copy files from filesystem into the dotfiles repo
         cp -v ~/.zshrc "${DOTFILES_DIR}/.zshrc"
+        cp -v ~/.hushlogin "${DOTFILES_DIR}/.hushlogin"
         cp -v ~/.aerospace.toml "${DOTFILES_DIR}/.aerospace.toml"
         cp -v ~/.gitconfig "${DOTFILES_DIR}/.gitconfig"
         cp -v ~/.gitconfig-karaconnect "${DOTFILES_DIR}/.gitconfig-karaconnect"
@@ -72,6 +73,7 @@ case "${1}" in
 
         # Copy files from dotfiles repo into the filesystem
         cp -v "${DOTFILES_DIR}/.zshrc" "${HOME}/.zshrc"
+        cp -v "${DOTFILES_DIR}/.hushlogin" "${HOME}/.hushlogin"
         cp -v "${DOTFILES_DIR}/.aerospace.toml" "${HOME}/.aerospace.toml"
         cp -v "${DOTFILES_DIR}/.gitconfig" "${HOME}/.gitconfig"
         cp -v "${DOTFILES_DIR}/.gitconfig-karaconnect" "${HOME}/.gitconfig-karaconnect"
