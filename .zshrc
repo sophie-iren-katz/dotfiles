@@ -11,16 +11,32 @@ autoload -U compinit
 compinit
 
 # Plugins
-source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -d /opt/homebrew ]]; then
+    source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    if [[ -d /usr/local/share/zsh-autocomplete ]]; then
+        source /usr/local/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+    fi
+
+    if [[ -d /usr/local/share/zsh-autosuggestions ]]; then
+        source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    fi
+
+    if [[ -d /usr/local/share/zsh-syntax-highlighting ]]; then
+        source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    fi
+fi
 
 # Prompt
 eval "$(starship init zsh)"
 
 # Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/pkg-config/lib/pkgconfig:/opt/homebrew/opt/mysql-client/lib/pkgconfig"
+if [[ -d /opt/homebrew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PKG_CONFIG_PATH="/opt/homebrew/opt/pkg-config/lib/pkgconfig:/opt/homebrew/opt/mysql-client/lib/pkgconfig"
+fi
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
@@ -47,29 +63,30 @@ alias ls='eza'
 
 # Additional scripts
 . ~/.zsh/bitch.zsh
+. ~/.zsh/claude.zsh
 . ~/.zsh/dotfiles.zsh
 . ~/.zsh/git.zsh
 
 # Path
-export PATH="/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:$(brew --prefix)/opt/python@3.11/libexec/bin:/opt/mysql/bin:${PATH}"
+export PATH="/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:/opt/mysql/bin:${PATH}"
+
+if command -v brew >/dev/null 2>&1; then
+    export PATH="$(brew --prefix)/opt/python@3.11/libexec/bin:${PATH}"
+fi
+
 export MYSQLCLIENT_LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
 export MYSQLCLIENT_CFLAGS="-I/opt/homebrew/opt/mysql-client/include/mysql"
 
 # Go private
-export GOPRIVATE='github.com/sophie-lund/*'
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export GOPRIVATE='github.com/sophie-iren-katz/*'
 
 # bun completions
 [ -s "/Users/sophie/.bun/_bun" ] && source "/Users/sophie/.bun/_bun"
 
 # thefuck
-eval $(thefuck --alias)
-
-# zoxide
-eval "$(zoxide init --cmd cd zsh)"
-
-# Claude accounts
-alias claude-karaconnect="CLAUDE_CONFIG_DIR=~/.claude-karaconnect claude"
+if command -v thefuck >/dev/null 2>&1; then
+    eval $(thefuck --alias)
+fi
 
 # Keybindings
 bindkey "^[^[[C" forward-word
@@ -81,4 +98,12 @@ bindkey '\eOF'  end-of-line
 
 # Keys
 export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"
+ssh-add ~/.ssh/id_ed25519_personal >/dev/null 2>&1
+ssh-add ~/.ssh/id_ed25519_karaconnect >/dev/null 2>&1
 
+# Ctrl
+export CTRL_NO_OPEN=1
+
+# zoxide (must be last)
+eval "$(zoxide init zsh --cmd cd)"
+export _ZO_DOCTOR=0
