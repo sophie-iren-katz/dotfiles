@@ -15,18 +15,6 @@ if [[ -d /opt/homebrew ]]; then
     source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
     source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
     source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-else
-    if [[ -d /usr/local/share/zsh-autocomplete ]]; then
-        source /usr/local/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-    fi
-
-    if [[ -d /usr/local/share/zsh-autosuggestions ]]; then
-        source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    fi
-
-    if [[ -d /usr/local/share/zsh-syntax-highlighting ]]; then
-        source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    fi
 fi
 
 # Prompt
@@ -59,7 +47,9 @@ export POETRY_VIRTUALENVS_IN_PROJECT=1
 . "$HOME/.cargo/env"
 
 # Aliases
-alias ls='eza'
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza'
+fi
 
 # Additional scripts
 . ~/.zsh/bitch.zsh
@@ -97,7 +87,10 @@ bindkey '\e[F'  end-of-line
 bindkey '\eOF'  end-of-line
 
 # Keys
-export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"
+if [[ -z "${GITHUB_PERSONAL_ACCESS_TOKEN}" ]]; then
+    export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"
+fi
+
 ssh-add ~/.ssh/id_ed25519_personal >/dev/null 2>&1
 ssh-add ~/.ssh/id_ed25519_karaconnect >/dev/null 2>&1
 
@@ -105,5 +98,7 @@ ssh-add ~/.ssh/id_ed25519_karaconnect >/dev/null 2>&1
 export CTRL_NO_OPEN=1
 
 # zoxide (must be last)
-eval "$(zoxide init zsh --cmd cd)"
-export _ZO_DOCTOR=0
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh --cmd cd)"
+    export _ZO_DOCTOR=0
+fi

@@ -25,8 +25,27 @@ function claude {
 
 function claude-karaconnect {
     if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
+        echo "Running Claude-karaconnect inside sandbox in god mode..."
         CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions "$@"
     else
         /usr/local/bin/docker compose -p claude-sandbox exec -w "$(_sandbox_workdir)" claude-sandbox zsh -c ". ~/.zshrc && claude-karaconnect ${@}"
+    fi
+}
+
+function claude-host {
+    if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
+        echo "Cannot run claude-host inside sandbox"
+        return 1
+    else
+        _original_claude "${@}"
+    fi
+}
+
+function claude-karaconnect-host {
+    if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
+        echo "Cannot run claude-karaconnect-host inside sandbox"
+        return 1
+    else
+        CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude "${@}"
     fi
 }

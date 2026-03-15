@@ -409,8 +409,19 @@ function ghlog {
 }
 
 function gh {
+    local original_gh
+
+    if [[ -f /opt/homebrew/bin/gh ]]; then
+        original_gh="/opt/homebrew/bin/gh"
+    elif [[ -f /usr/bin/gh ]]; then
+        original_gh="/usr/bin/gh"
+    else
+        echo "gh is not installed"
+        return 1
+    fi
+
     local currently_logged_in_as_kara=false
-    if [[ -n "$(/opt/homebrew/bin/gh auth status --active --json hosts | jq -r '.hosts["github.com"] | .[].login' | grep -i sophie-katz-kara)" ]]; then
+    if [[ -n "$(${original_gh} auth status --active --json hosts | jq -r '.hosts["github.com"] | .[].login' | grep -i sophie-katz-kara)" ]]; then
         currently_logged_in_as_kara=true
     fi
 
@@ -420,10 +431,10 @@ function gh {
     fi
 
     if [[ "${currently_logged_in_as_kara}" == "true" ]] && [[ "${current_repository_is_kara}" == "false" ]]; then
-        /opt/homebrew/bin/gh auth switch --user sophie-iren-katz
+        ${original_gh} auth switch --user sophie-iren-katz
     elif [[ "${currently_logged_in_as_kara}" == "false" ]] && [[ "${current_repository_is_kara}" == "true" ]]; then
-        /opt/homebrew/bin/gh auth switch --user sophie-katz-kara
+        ${original_gh} auth switch --user sophie-katz-kara
     fi
 
-    /opt/homebrew/bin/gh "$@"
+    ${original_gh} "$@"
 }
