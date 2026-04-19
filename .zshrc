@@ -28,8 +28,9 @@ fi
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use --lts >/dev/null  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 
 # Node.JS
 export NODE_OPTIONS="--max-old-space-size=8192"
@@ -56,6 +57,7 @@ fi
 . ~/.zsh/claude.zsh
 . ~/.zsh/dotfiles.zsh
 . ~/.zsh/git.zsh
+. ~/.zsh/kitty.zsh
 
 # Path
 export PATH="/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:/opt/mysql/bin:${PATH}"
@@ -102,3 +104,4 @@ if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh --cmd cd)"
     export _ZO_DOCTOR=0
 fi
+export PATH=$PATH:$HOME/.maestro/bin
