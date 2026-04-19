@@ -9,10 +9,10 @@
     path = ~/.gitconfig-karaconnect
 
 [diff]
-    tool = cursor
+    tool = code
 
-[difftool "cursor"]
-    cmd = cursor --wait --reuse-window --diff $LOCAL $REMOTE
+[difftool "code"]
+    cmd = code --wait --reuse-window --diff $LOCAL $REMOTE
 
 [url "git@github.com:"]
       insteadOf = https://github.com/
