@@ -18,6 +18,14 @@ INPUT="$(cat)"
 COMMAND="$(echo "$INPUT" | jq -r '.tool_input.command // .command // empty' 2>/dev/null)"
 EXIT_CODE="$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.exitCode // .exit_code // empty' 2>/dev/null)"
 STDOUT="$(echo "$INPUT"   | jq -r '.tool_response.stdout    // .stdout    // empty' 2>/dev/null)"
+TRANSCRIPT="$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)"
+CWD="$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)"
+
+LABEL=""
+if [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ]; then
+  LABEL="$(grep -o '"customTitle":"[^"]*"' "$TRANSCRIPT" | tail -1 | sed 's/"customTitle":"\(.*\)"/\1/')"
+fi
+[ -z "$LABEL" ] && [ -n "$CWD" ] && LABEL="$(basename "$CWD")"
 
 [ -z "$COMMAND" ] && exit 0
 
@@ -27,7 +35,7 @@ if echo "$COMMAND" | grep -qE '(^|[[:space:]&;|])gh[[:space:]]+pr[[:space:]]+cre
     URL="$(printf '%s\n' "$STDOUT" | grep -oE 'https://github\.com/[^[:space:]]+/pull/[0-9]+' | head -1)"
     MSG="PR opened"
     [ -n "$URL" ] && MSG="PR opened: $URL"
-    "$NOTIFY" "Claude Code" "$MSG"
+    "$NOTIFY" "Claude Code" "$MSG" "$LABEL"
   fi
   exit 0
 fi
@@ -36,7 +44,7 @@ fi
 TEST_RE='(^|[[:space:]&;|])((npm|pnpm|yarn|bun)([[:space:]]+run)?[[:space:]]+test|bun[[:space:]]+test|vitest|pytest|jest|cargo[[:space:]]+test|go[[:space:]]+test|just[[:space:]]+test)([[:space:]]|$)'
 if echo "$COMMAND" | grep -qE "$TEST_RE"; then
   if [ -n "$EXIT_CODE" ] && [ "$EXIT_CODE" != "0" ]; then
-    "$NOTIFY" "Claude Code" "Tests failed (exit $EXIT_CODE)"
+    "$NOTIFY" "Claude Code" "Tests failed (exit $EXIT_CODE)" "$LABEL"
   fi
   exit 0
 fi
