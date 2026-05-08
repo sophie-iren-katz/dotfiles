@@ -57,7 +57,7 @@ function _original_claude {
 # ------------------------
 
 function claude {
-    _original_claude --dangerously-skip-permissions "$@"
+    _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
 }
 
 function claude-safe {
@@ -65,7 +65,7 @@ function claude-safe {
 }
 
 function claude-karaconnect {
-    CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions "$@"
+    CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
 }
 
 function claude-karaconnect-safe {
@@ -73,7 +73,7 @@ function claude-karaconnect-safe {
 }
 
 function claude-kararobot {
-    CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude --dangerously-skip-permissions "$@"
+    CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
 }
 
 function claude-kararobot-safe {
