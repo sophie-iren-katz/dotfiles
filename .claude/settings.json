@@ -1,60 +1,60 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-	"permissions": {
-		"allow": [
-			"Agent",
-			"Bash",
-			"Edit",
-			"ExitPlanMode",
-			"Glob",
-			"Grep",
-			"Read",
-			"Skill",
-			"TaskCreate",
-			"TaskGet",
-			"TaskList",
-			"TaskOutput",
-			"TaskStop",
-			"TaskUpdate",
-			"ToolSearch",
-			"WebFetch",
-			"WebSearch",
-			"Write",
-			"Bash(bun:*)",
-			"Bash(bunx:*)",
-			"Bash(pulumi preview:*)",
-			"Bash(pulumi up:*)",
-			"Bash(pulumi stack:*)",
-			"Bash(pulumi config:*)",
-			"Bash(docker compose:*)",
-			"Bash(aws s3 ls:*)",
-			"Bash(aws s3api head-bucket:*)",
-			"Bash(aws dynamodb list-tables:*)",
-			"Bash(aws dynamodb describe-table:*)",
-			"Bash(aws ssm get-parameter:*)",
-			"Bash(aws ssm get-parameters-by-path:*)",
-			"Bash(aws lambda list-functions:*)",
-			"Bash(aws logs describe-log-groups:*)",
-			"Bash(aws logs tail:*)"
-		],
-		"deny": [
-			"Bash(sudo:*)",
-			"Bash(rm -rf /*)",
-			"Bash(rm -rf /)",
-			"Bash(rm -rf .)",
-			"Bash(curl * | sh:*)",
-			"Bash(wget * | sh:*)",
-			"Bash(git push --force:*)",
-			"Bash(git reset --hard:*)",
-			"Bash(aws s3 rb:*)",
-			"Bash(aws dynamodb delete-table:*)",
-			"Bash(pulumi destroy:*)"
-		]
-	},
-	"respectGitignore": true,
-	"env": {
-		"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-	},
+  "respectGitignore": true,
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Agent",
+      "Bash",
+      "Edit",
+      "ExitPlanMode",
+      "Glob",
+      "Grep",
+      "Read",
+      "Skill",
+      "TaskCreate",
+      "TaskGet",
+      "TaskList",
+      "TaskOutput",
+      "TaskStop",
+      "TaskUpdate",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Write",
+      "Bash(bun:*)",
+      "Bash(bunx:*)",
+      "Bash(pulumi preview:*)",
+      "Bash(pulumi up:*)",
+      "Bash(pulumi stack:*)",
+      "Bash(pulumi config:*)",
+      "Bash(docker compose:*)",
+      "Bash(aws s3 ls:*)",
+      "Bash(aws s3api head-bucket:*)",
+      "Bash(aws dynamodb list-tables:*)",
+      "Bash(aws dynamodb describe-table:*)",
+      "Bash(aws ssm get-parameter:*)",
+      "Bash(aws ssm get-parameters-by-path:*)",
+      "Bash(aws lambda list-functions:*)",
+      "Bash(aws logs describe-log-groups:*)",
+      "Bash(aws logs tail:*)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf .)",
+      "Bash(curl * | sh:*)",
+      "Bash(wget * | sh:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(aws s3 rb:*)",
+      "Bash(aws dynamodb delete-table:*)",
+      "Bash(pulumi destroy:*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -137,6 +137,11 @@
   },
   "effortLevel": "medium",
   "skipDangerousModePermissionPrompt": true,
+  "preferredNotifChannel": "notifications_disabled",
   "agentPushNotifEnabled": true,
-  "preferredNotifChannel": "notifications_disabled"
+  "voiceEnabled": true,
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  }
 }
