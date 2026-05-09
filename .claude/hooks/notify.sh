@@ -127,11 +127,16 @@ fi
 # ---------------------------------------------------------------------------
 (
   exec </dev/null >/dev/null 2>&1
+  GROUP_ARGS=()
+  if [ -n "$WIN_ID" ]; then
+    GROUP_ARGS=(-group "kitty-window-$WIN_ID")
+  fi
   "$BIN" \
     -title "$TITLE" \
     -message "$MESSAGE" \
     -timeout 30 \
-    -execute "$EXECUTE" &
+    -execute "$EXECUTE" \
+    "${GROUP_ARGS[@]}" &
   disown 2>/dev/null || true
 ) &
 disown 2>/dev/null || true
