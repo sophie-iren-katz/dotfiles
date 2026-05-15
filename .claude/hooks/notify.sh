@@ -7,9 +7,9 @@
 # originating window ($KITTY_WINDOW_ID). If we can't reach kitty, falls
 # back to override_label, then fallback_title.
 #
-# Self-bootstraps a clone of terminal-notifier.app with Claude.app's icon
-# (terminal-notifier's -sender bundle-ID spoofing is broken on macOS
-# Sonoma+; this is the reliable workaround).
+# Requires the v3.x fork of terminal-notifier from
+# https://github.com/sophie-iren-katz/terminal-notifier, which supports
+# -sender bundle-ID spoofing natively via self-cloning bundles.
 #
 # Skips the notification when the originating kitty tab is already the
 # frontmost focused window.
@@ -24,55 +24,51 @@ MESSAGE="${2:-}"
 OVERRIDE_LABEL="${3:-}"
 
 # ---------------------------------------------------------------------------
-# Bootstrap a Claude-icon'd notifier app (one-time, idempotent).
+# Require the v3.x fork on PATH.
 # ---------------------------------------------------------------------------
-TN_SRC="/opt/homebrew/opt/terminal-notifier/terminal-notifier.app"
-[ -d "$TN_SRC" ] || TN_SRC="/usr/local/opt/terminal-notifier/terminal-notifier.app"
-CLAUDE_APP="/Applications/Claude.app"
-CLAUDE_ICON="$CLAUDE_APP/Contents/Resources/electron.icns"
+BIN="$(command -v terminal-notifier || true)"
+if [ -z "$BIN" ]; then
+  cat >&2 <<'EOF'
+notify.sh: terminal-notifier not found on PATH.
 
-CACHE_DIR="$HOME/.claude/cache"
-APP="$CACHE_DIR/Claude-Notifier.app"
-BIN="$APP/Contents/MacOS/terminal-notifier"
-STAMP="$APP/.built-from"
+This script requires the v3.x fork from sophie-iren-katz/terminal-notifier.
+To install:
 
-needs_rebuild() {
-  [ ! -x "$BIN" ] && return 0
-  [ ! -f "$STAMP" ] && return 0
-  [ "$(cat "$STAMP" 2>/dev/null)" != "$TN_SRC" ] && return 0
-  if [ "$TN_SRC/Contents/MacOS/terminal-notifier" -nt "$BIN" ]; then return 0; fi
-  return 1
-}
-
-build_app() {
-  [ -d "$TN_SRC" ] || return 1
-  [ -f "$CLAUDE_ICON" ] || return 1
-  mkdir -p "$CACHE_DIR"
-  rm -rf "$APP"
-  cp -R "$TN_SRC" "$APP" || return 1
-
-  local icon_name
-  icon_name="$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFile" "$APP/Contents/Info.plist" 2>/dev/null)"
-  [ -z "$icon_name" ] && icon_name="Terminal"
-  case "$icon_name" in *.icns) : ;; *) icon_name="${icon_name}.icns" ;; esac
-  cp -f "$CLAUDE_ICON" "$APP/Contents/Resources/$icon_name" || return 1
-
-  /usr/bin/plutil -replace CFBundleIdentifier -string "dev.sophie.claude-notifier" "$APP/Contents/Info.plist"
-  /usr/bin/plutil -replace CFBundleName       -string "Claude Code"               "$APP/Contents/Info.plist"
-
-  /usr/bin/codesign --force --deep --sign - "$APP" >/dev/null 2>&1
-
-  printf '%s' "$TN_SRC" > "$STAMP"
-}
-
-if needs_rebuild; then
-  build_app || true
+  git clone https://github.com/sophie-iren-katz/terminal-notifier.git
+  cd terminal-notifier
+  just install
+EOF
+  exit 1
 fi
 
-if [ ! -x "$BIN" ]; then
-  BIN="$(command -v terminal-notifier || true)"
+TN_MAJOR="$("$BIN" -version 2>/dev/null | sed -nE 's/.* ([0-9]+)\.[0-9]+\.[0-9]+.*/\1/p')"
+if [ "$TN_MAJOR" != "3" ]; then
+  if [ "$TN_MAJOR" = "2" ]; then
+    cat >&2 <<EOF
+notify.sh: found terminal-notifier v2.x at $BIN — this script requires v3.x.
+
+Uninstall the existing version first (e.g. \`brew uninstall terminal-notifier\`)
+and remove $BIN if it still exists. Then install the fork:
+
+  git clone https://github.com/sophie-iren-katz/terminal-notifier.git
+  cd terminal-notifier
+  just install
+EOF
+  else
+    cat >&2 <<EOF
+notify.sh: terminal-notifier at $BIN is not v3.x.
+
+This script requires the v3.x fork from sophie-iren-katz/terminal-notifier:
+
+  git clone https://github.com/sophie-iren-katz/terminal-notifier.git
+  cd terminal-notifier
+  just install
+EOF
+  fi
+  exit 1
 fi
-[ -x "$BIN" ] || exit 0
+
+SENDER_BUNDLE_ID="com.anthropic.claudefordesktop"
 
 # ---------------------------------------------------------------------------
 # Query kitty once: derive focus state AND the originating tab's title.
@@ -132,6 +128,7 @@ fi
     GROUP_ARGS=(-group "kitty-window-$WIN_ID")
   fi
   "$BIN" \
+    -sender "$SENDER_BUNDLE_ID" \
     -title "$TITLE" \
     -message "$MESSAGE" \
     -timeout 30 \
