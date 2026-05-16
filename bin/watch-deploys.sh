@@ -75,13 +75,22 @@ echo "watching $ORG deploys for @$ME (poll ${POLL_INTERVAL}s)"
 # strings with leading+trailing spaces for safe substring matching.
 SEEN=" "
 MY_REFS=" "  # tokens of form "repo|branch"
+NEW_REFS=" " # refs added during the current scan iteration only
 CHILDREN=""
 FIRST_SCAN=1  # on first scan, just populate SEEN — don't notify for history
 
-is_seen()   { case "$SEEN"    in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
-mark_seen() { SEEN="$SEEN$1 "; }
-is_my_ref() { case "$MY_REFS" in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
-add_my_ref() { is_my_ref "$1" || MY_REFS="$MY_REFS$1 "; }
+is_seen()    { case "$SEEN"     in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+mark_seen()  { SEEN="$SEEN$1 "; }
+is_my_ref()  { case "$MY_REFS"  in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+is_new_ref() { case "$NEW_REFS" in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+add_my_ref() {
+  is_my_ref "$1" && return
+  MY_REFS="$MY_REFS$1 "
+  # After the initial baseline, a ref appearing for the first time means a
+  # newly-opened PR. Historical runs on its branch must be baselined into
+  # SEEN — otherwise they'd fire notifications for week-old deploys.
+  (( FIRST_SCAN )) || NEW_REFS="$NEW_REFS$1 "
+}
 
 cleanup() {
   for pid in $CHILDREN; do
@@ -166,6 +175,12 @@ scan_repo() {
       # Baseline pass — record state without notifying for historical runs.
       continue
     fi
+    # Ref baselined this scan (new PR opened on a branch with old runs):
+    # only skip if the ref match is what got us here — runs that *we*
+    # triggered should still notify normally.
+    if [[ "$trigger" != "$ME" ]] && is_new_ref "$repo|$branch"; then
+      continue
+    fi
     if [[ "$status" == "completed" ]]; then
       echo "[done    ] $repo · $wf · #$run_id ($conclusion)"
       notify_done "$repo" "$wf" "$conclusion" "$url"
@@ -192,6 +207,7 @@ scan_repo() {
 }
 
 scan() {
+  NEW_REFS=" "
   refresh_my_refs
   # Repos to scan = union of repos with my PRs (covers org-wide subset where I'm active).
   local repos
