@@ -113,10 +113,11 @@ prune_children() {
 }
 # Bash runs INT/TERM traps but does NOT exit afterwards — without an explicit
 # `exit`, Ctrl-C just runs cleanup and then the script returns to its `sleep`
-# loop. Make the signal actually terminate the script.
+# loop. Make the signal actually terminate the script. EXIT does the cleanup;
+# INT/TERM just trigger the exit so cleanup runs exactly once.
 trap cleanup EXIT
-trap 'cleanup; exit 130' INT
-trap 'cleanup; exit 143' TERM
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 notify_done() {
   local repo=$1 wf=$2 conclusion=$3 url=$4

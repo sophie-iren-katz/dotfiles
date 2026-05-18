@@ -75,8 +75,8 @@ case "${1}" in
         echo "$ git push"
         ;;
     load)
-        # Make sure to pull latest
-        git pull
+        # Make sure to pull latest (always against the dotfiles repo, not $PWD)
+        git -C "${DOTFILES_DIR}" pull
 
         # Make directories if needed
         mkdir -p "${HOME}/.claude/hooks"
