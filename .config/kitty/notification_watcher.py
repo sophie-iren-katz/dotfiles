@@ -7,6 +7,7 @@ On focus, we ask terminal-notifier to remove that group.
 """
 
 import os
+import shutil
 import subprocess
 
 NOTIFIER_CANDIDATES = (
@@ -20,7 +21,7 @@ def _notifier():
     for path in NOTIFIER_CANDIDATES:
         if os.path.isfile(path) and os.access(path, os.X_OK):
             return path
-    return None
+    return shutil.which("terminal-notifier")
 
 
 def on_focus_change(boss, window, data):
@@ -30,11 +31,13 @@ def on_focus_change(boss, window, data):
     if bin_path is None:
         return
     try:
-        subprocess.Popen(
+        subprocess.run(
             [bin_path, "-remove", f"kitty-window-{window.id}"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             close_fds=True,
+            timeout=2,
+            check=False,
         )
     except Exception:
         pass

@@ -96,6 +96,8 @@ cleanup() {
   for pid in $CHILDREN; do
     kill "$pid" 2>/dev/null || true
   done
+  # Reap so backgrounded `gh run watch` children don't outlive us.
+  wait 2>/dev/null || true
 }
 # Bash runs INT/TERM traps but does NOT exit afterwards — without an explicit
 # `exit`, Ctrl-C just runs cleanup and then the script returns to its `sleep`
