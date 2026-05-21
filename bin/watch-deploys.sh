@@ -96,13 +96,28 @@ cleanup() {
   for pid in $CHILDREN; do
     kill "$pid" 2>/dev/null || true
   done
+  # Reap so backgrounded `gh run watch` children don't outlive us.
+  wait 2>/dev/null || true
+}
+
+# Prune PIDs that have already exited so $CHILDREN doesn't grow unbounded
+# over the daemon's lifetime (one entry per finished `gh run watch`).
+prune_children() {
+  local alive="" pid
+  for pid in $CHILDREN; do
+    if kill -0 "$pid" 2>/dev/null; then
+      alive="$alive $pid"
+    fi
+  done
+  CHILDREN="$alive"
 }
 # Bash runs INT/TERM traps but does NOT exit afterwards — without an explicit
 # `exit`, Ctrl-C just runs cleanup and then the script returns to its `sleep`
-# loop. Make the signal actually terminate the script.
+# loop. Make the signal actually terminate the script. EXIT does the cleanup;
+# INT/TERM just trigger the exit so cleanup runs exactly once.
 trap cleanup EXIT
-trap 'cleanup; exit 130' INT
-trap 'cleanup; exit 143' TERM
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 notify_done() {
   local repo=$1 wf=$2 conclusion=$3 url=$4
@@ -220,6 +235,7 @@ scan() {
 
 while true; do
   scan || echo "[scan] error (continuing)" >&2
+  prune_children
   if (( FIRST_SCAN )); then
     echo "[ready   ] baseline established; watching for new deploys"
     FIRST_SCAN=0
