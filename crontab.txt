@@ -1,0 +1,3 @@
+# Hourly dotclaude backup. The script self-throttles to once per 24h
+# on success, and re-runs on every tick after a failure.
+0 * * * * /Users/sophie/.claude/backup.sh

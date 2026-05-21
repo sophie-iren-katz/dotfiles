@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Watch karaconnect workflow runs whose name contains "deploy" and notify
+# Watch karaconnect workflow runs whose name contains "deploy" or "publish" and notify
 # via terminal-notifier when they finish. Scope: runs triggered by me, or
 # runs on the head branch of a PR I opened.
 #
@@ -121,16 +121,20 @@ trap 'exit 143' TERM
 
 notify_done() {
   local repo=$1 wf=$2 conclusion=$3 url=$4
-  local icon msg
+  local icon msg kind
   case "$conclusion" in
     success)   icon="✅"; msg="succeeded" ;;
     failure)   icon="❌"; msg="failed" ;;
     cancelled) icon="⚠️";  msg="cancelled" ;;
     *)         icon="ℹ️";  msg="$conclusion" ;;
   esac
+  case "$wf" in
+    *[Pp]ublish*) kind="Publish" ;;
+    *)            kind="Deploy" ;;
+  esac
   "$NOTIFIER_BIN" \
     -sender "$SENDER_BUNDLE_ID" \
-    -title "$icon Deploy $msg" \
+    -title "$icon $kind $msg" \
     -message "$repo · $wf" \
     -open "$url" \
     -sound default >/dev/null 2>&1 || true
@@ -206,7 +210,7 @@ scan_repo() {
     fi
   done < <(echo "$runs" | jq -r '
     .workflow_runs[]
-    | select(.name | test("deploy"; "i"))
+    | select(.name | test("deploy|publish"; "i"))
     | [
         .id,
         .name,

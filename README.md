@@ -21,3 +21,22 @@ $ git push
 $ cd ~/.dotfiles
 $ ./dotfiles.bash load
 ```
+
+## Crontab
+
+`crontab.txt` holds the scheduled jobs for this machine (currently the hourly
+`~/.claude/backup.sh` run). It's the source of truth — edit the file, then
+install it with:
+
+```shell
+$ crontab ~/.dotfiles/crontab.txt
+
+# Verify what's installed
+$ crontab -l
+```
+
+To capture the currently-installed crontab back into the repo before editing:
+
+```shell
+$ crontab -l > ~/.dotfiles/crontab.txt
+```

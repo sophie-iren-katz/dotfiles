@@ -32,7 +32,6 @@ fi
 case "${1}" in
     save)
         # Make directories if needed
-        mkdir -p "${DOTFILES_DIR}/.claude/hooks"
         mkdir -p "${DOTFILES_DIR}/.config/kitty"
         mkdir -p "${DOTFILES_DIR}/.config/mpv"
         mkdir -p "${DOTFILES_DIR}/.zsh"
@@ -58,14 +57,6 @@ case "${1}" in
         cp -v "${HOME}/.zsh/completions/_gsta" "${DOTFILES_DIR}/.zsh/completions/_gsta"
         cp -v "${HOME}/.zsh/completions/_gsub" "${DOTFILES_DIR}/.zsh/completions/_gsub"
         cp -v "${HOME}/.zsh/completions/_gunadd" "${DOTFILES_DIR}/.zsh/completions/_gunadd"
-        cp -v "${HOME}/.claude/CLAUDE.md" "${DOTFILES_DIR}/.claude/CLAUDE.md"
-        cp -v "${HOME}/.claude/settings.json" "${DOTFILES_DIR}/.claude/settings.json"
-        cp -v "${HOME}/.claude/hooks/guard-aws-role.sh" "${DOTFILES_DIR}/.claude/hooks/guard-aws-role.sh"
-        cp -v "${HOME}/.claude/hooks/guard-destructive.sh" "${DOTFILES_DIR}/.claude/hooks/guard-destructive.sh"
-        cp -v "${HOME}/.claude/hooks/guard-protected-paths.sh" "${DOTFILES_DIR}/.claude/hooks/guard-protected-paths.sh"
-        cp -v "${HOME}/.claude/hooks/notify-on-event.sh" "${DOTFILES_DIR}/.claude/hooks/notify-on-event.sh"
-        cp -v "${HOME}/.claude/hooks/notify-on-stop.sh" "${DOTFILES_DIR}/.claude/hooks/notify-on-stop.sh"
-        cp -v "${HOME}/.claude/hooks/notify.sh" "${DOTFILES_DIR}/.claude/hooks/notify.sh"
 
         # Notify the user what to do next
         echo
@@ -79,7 +70,6 @@ case "${1}" in
         git -C "${DOTFILES_DIR}" pull
 
         # Make directories if needed
-        mkdir -p "${HOME}/.claude/hooks"
         mkdir -p "${HOME}/.config/kitty"
         mkdir -p "${HOME}/.config/mpv"
         mkdir -p "${HOME}/.zsh"
@@ -105,14 +95,6 @@ case "${1}" in
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gsta" "${HOME}/.zsh/completions/_gsta"
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gsub" "${HOME}/.zsh/completions/_gsub"
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gunadd" "${HOME}/.zsh/completions/_gunadd"
-        cp -v "${DOTFILES_DIR}/.claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
-        cp -v "${DOTFILES_DIR}/.claude/settings.json" "${HOME}/.claude/settings.json"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/guard-aws-role.sh" "${HOME}/.claude/hooks/guard-aws-role.sh"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/guard-destructive.sh" "${HOME}/.claude/hooks/guard-destructive.sh"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/guard-protected-paths.sh" "${HOME}/.claude/hooks/guard-protected-paths.sh"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/notify-on-event.sh" "${HOME}/.claude/hooks/notify-on-event.sh"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/notify-on-stop.sh" "${HOME}/.claude/hooks/notify-on-stop.sh"
-        cp -v "${DOTFILES_DIR}/.claude/hooks/notify.sh" "${HOME}/.claude/hooks/notify.sh"
         ;;
     *)
         echo "error: invalid command ${1}"
