@@ -1,81 +1,37 @@
-function _original_claude {
-    if [[ -f /Users/sophie/.local/bin/claude ]]; then
-        /Users/sophie/.local/bin/claude "$@"
-    elif [[ -f /home/sophie/.nvm/versions/node/$(nvm version)/bin/claude ]]; then
-        /home/sophie/.nvm/versions/node/$(nvm version)/bin/claude "$@"
+function claude-unaliased {
+    # Make sure the keychain is unlocked when SSH-ing in
+    if ! security show-keychain-info >/dev/null 2>&1; then
+        security unlock-keychain
+    fi
+
+    if [[ -f $HOME/.local/bin/claude ]]; then
+        $HOME/.local/bin/claude "$@"
     else
         echo "Claude is not installed"
         return 1
     fi
 }
 
-# Using sandbox Docker container
-# ------------------------------
-
-# function _sandbox_workdir {
-#     local container_path="${PWD/#$HOME//home/sophie}"
-#     echo "$container_path"
-# }
-
-# function claude {
-#     if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
-#         echo "Running Claude inside sandbox in god mode..."
-#         _original_claude --dangerously-skip-permissions "$@"
-#     else
-#         /usr/local/bin/docker compose -p claude-sandbox exec -w "$(_sandbox_workdir)" claude-sandbox zsh -c ". ~/.zshrc && claude ${@}"
-#     fi
-# }
-
-# function claude-karaconnect {
-#     if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
-#         echo "Running Claude-karaconnect inside sandbox in god mode..."
-#         CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions "$@"
-#     else
-#         /usr/local/bin/docker compose -p claude-sandbox exec -w "$(_sandbox_workdir)" claude-sandbox zsh -c ". ~/.zshrc && claude-karaconnect ${@}"
-#     fi
-# }
-
-# function claude-host {
-#     if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
-#         echo "Cannot run claude-host inside sandbox"
-#         return 1
-#     else
-#         _original_claude "${@}"
-#     fi
-# }
-
-# function claude-karaconnect-host {
-#     if [[ "${SOPHIE_CLAUDE_SANDBOX:-}" == "true" ]]; then
-#         echo "Cannot run claude-karaconnect-host inside sandbox"
-#         return 1
-#     else
-#         CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude "${@}"
-#     fi
-# }
-
-# Wildly unsafe bare metal
-# ------------------------
-
 function claude {
-    _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
+    claude-unaliased --dangerously-skip-permissions --chrome --remote-control "$@"
 }
 
 function claude-safe {
-    _original_claude "$@"
+    claude-unaliased "$@"
 }
 
-function claude-karaconnect {
-    CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
-}
+# function claude-karaconnect {
+#     CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
+# }
 
-function claude-karaconnect-safe {
-    CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude "$@"
-}
+# function claude-karaconnect-safe {
+#     CLAUDE_CONFIG_DIR=~/.claude-karaconnect _original_claude "$@"
+# }
 
-function claude-kararobot {
-    CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
-}
+# function claude-kararobot {
+#     CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude --dangerously-skip-permissions --chrome --remote-control "$@"
+# }
 
-function claude-kararobot-safe {
-    CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude "$@"
-}
+# function claude-kararobot-safe {
+#     CLAUDE_CONFIG_DIR=~/.claude-kararobot _original_claude "$@"
+# }

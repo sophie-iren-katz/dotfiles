@@ -7,37 +7,65 @@ On focus, we ask terminal-notifier to remove that group.
 """
 
 import os
-import shutil
 import subprocess
+import shutil
+import time
 
-NOTIFIER_CANDIDATES = (
-    os.path.expanduser("~/.claude/cache/Claude-Notifier.app/Contents/MacOS/terminal-notifier"),
-    "/opt/homebrew/bin/terminal-notifier",
-    "/usr/local/bin/terminal-notifier",
-)
+SENDER_BUNDLE_ID = "com.anthropic.claudefordesktop"
+LOG_PATH = "/tmp/notif-watcher.log"
+
+
+def _log(msg):
+    try:
+        with open(LOG_PATH, "a") as f:
+            f.write(f"[{time.strftime('%H:%M:%S')}] {msg}\n")
+    except Exception:
+        pass
 
 
 def _notifier():
-    for path in NOTIFIER_CANDIDATES:
+    # Must match the binary notify.sh actually posted with — the fork
+    # namespaces -group registries per posting binary, so a mismatch means
+    # -remove looks under the wrong namespace and silently no-ops.
+    # notify.sh resolves via `command -v terminal-notifier` against the
+    # user's interactive PATH; we can't rely on PATH here because kitty
+    # launched from the Dock only inherits LaunchServices' default PATH
+    # (no /usr/local/bin), so shutil.which returns None.
+    for path in ("/usr/local/bin/terminal-notifier", "/opt/homebrew/bin/terminal-notifier"):
         if os.path.isfile(path) and os.access(path, os.X_OK):
             return path
     return shutil.which("terminal-notifier")
 
 
 def on_focus_change(boss, window, data):
-    if not data.get("focused"):
+    focused = data.get("focused")
+    _log(f"focus change id={window.id} focused={focused}")
+    if not focused:
         return
     bin_path = _notifier()
+    _log(f"  notifier={bin_path} PATH={os.environ.get('PATH', '<unset>')}")
     if bin_path is None:
+        _log("  abort: no terminal-notifier on PATH")
         return
+    args = [
+        bin_path,
+        "-sender",
+        SENDER_BUNDLE_ID,
+        "-remove",
+        f"kitty-window-{window.id}",
+    ]
+    _log(f"  exec: {args}")
     try:
-        subprocess.run(
-            [bin_path, "-remove", f"kitty-window-{window.id}"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            close_fds=True,
-            timeout=2,
-            check=False,
+        proc = subprocess.run(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=5,
         )
-    except Exception:
-        pass
+        _log(
+            f"  rc={proc.returncode} "
+            f"stdout={proc.stdout.decode(errors='replace').strip()!r} "
+            f"stderr={proc.stderr.decode(errors='replace').strip()!r}"
+        )
+    except Exception as e:
+        _log(f"  error: {type(e).__name__}: {e}")
