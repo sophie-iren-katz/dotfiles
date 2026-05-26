@@ -5,10 +5,14 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=999999999
 export SAVEHIST=$HISTSIZE
 
-# Completions
-export fpath=(~/.zsh/completions/ $fpath)
-autoload -U compinit
-compinit
+# Completions (commented out for performance)
+# export fpath=(~/.zsh/completions/ $fpath)
+# autoload -U compinit
+# compinit
+
+# end=$(now_ms)
+# echo "completions took $((end - start)) ms"
+# start=$(now_ms)
 
 # Plugins
 if [[ -d /opt/homebrew ]]; then
@@ -26,11 +30,10 @@ if [[ -d /opt/homebrew ]]; then
     export PKG_CONFIG_PATH="/opt/homebrew/opt/pkg-config/lib/pkgconfig:/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 fi
 
-# NVM
+# NVM (mostly commented out for performance)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use --lts >/dev/null  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use --lts >/dev/null  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Node.JS
 export NODE_OPTIONS="--max-old-space-size=8192"
@@ -75,10 +78,10 @@ export GOPRIVATE='github.com/sophie-iren-katz/*'
 # bun completions
 [ -s "/Users/sophie/.bun/_bun" ] && source "/Users/sophie/.bun/_bun"
 
-# thefuck
-if command -v thefuck >/dev/null 2>&1; then
-    eval $(thefuck --alias)
-fi
+# thefuck (commented out for performance)
+# if command -v thefuck >/dev/null 2>&1; then
+#     eval $(thefuck --alias)
+# fi
 
 # Keybindings
 bindkey "^[^[[C" forward-word
