@@ -90,6 +90,9 @@ outer.right = 0
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
+# i3-style: open a new kitty OS window in $HOME
+alt-enter = 'exec-and-forget /Applications/kitty.app/Contents/MacOS/kitty --single-instance --directory ~'
+
 # All possible keys:
 # - Letters.        a, b, c, ..., z
 # - Numbers.        0, 1, 2, ..., 9
