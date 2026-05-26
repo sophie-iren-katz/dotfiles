@@ -143,30 +143,22 @@ kty() { kitty @ --to "$KITTY_SOCK" "$@"; }
 
 kty_state() { kty ls 2>/dev/null || echo "[]"; }
 
-# kty_find_tab CWD CMD -> prints "<kitty_window_id> <platform_window_id>" if a
-# matching tab exists somewhere, else empty.
-#   - cwd: matches the tab's window cwd exactly
-#   - CMD non-empty: any process in the tab's process tree must contain CMD as
-#     substring (e.g. `just dev` matches even when bun/vite is the deepest leaf)
-#   - CMD empty: tab must look like a plain shell — exactly one entry in the
-#     foreground process list and it's a shell. (Excludes tabs with anything
-#     running underneath, even if cwd matches.)
+# kty_find_tab TITLE -> prints "<kitty_window_id> <platform_window_id>" if a
+# tab with this exact title exists anywhere, else empty.
+#
+# We match on the title set via `--tab-title` because it's a stable identity:
+# kitty preserves the override even when the user cd's around or the foreground
+# process changes. cwd/process matching is fragile — a shell tab that was "the
+# AI3 ecosystem shell" can drift to any cwd, then either fail to match (and
+# get duplicated) or get mis-claimed by another spec with that cwd (causing
+# windows to swap workspaces).
 kty_find_tab() {
-  local cwd_abs="$1" cmd="$2"
-  kty_state | jq -r --arg cwd "$cwd_abs" --arg cmd "$cmd" '
+  local title="$1"
+  [ -z "$title" ] && return 0
+  kty_state | jq -r --arg title "$title" '
     [
       .[] as $osw | $osw.tabs[] as $tab | $tab.windows[] as $w |
-      select($w.cwd == $cwd) |
-      select(
-        if $cmd == "" then
-          (($w.foreground_processes | length) == 1)
-          and (($w.foreground_processes[0].cmdline // [] | join(" "))
-               | test("^-?(zsh|bash|fish|sh)$"))
-        else
-          any($w.foreground_processes[];
-              (.cmdline // [] | join(" ")) | contains($cmd))
-        end
-      ) |
+      select($tab.title == $title) |
       "\($w.id) \($osw.platform_window_id)"
     ] | .[0] // ""
   '
@@ -240,13 +232,13 @@ provision_kitty_window() {
   local first_cwd="$__cwd" first_cmd="$__cmd" first_title="$__title"
 
   local found
-  found=$(kty_find_tab "$first_cwd" "$first_cmd")
+  found=$(kty_find_tab "$first_title")
   if [ -n "$found" ]; then
     target_win_id="${found% *}"
     target_plat="${found##* }"
-    echo "  reusing existing OS window (platform_id=$target_plat) via first tab"
+    echo "  reusing existing OS window (platform_id=$target_plat) via tab '$first_title'"
   else
-    echo "  spawning new OS window with: $first_cwd  (\$ ${first_cmd:-<shell>})"
+    echo "  spawning new OS window with tab '$first_title'  (\$ ${first_cmd:-<shell>})"
     local spawn
     spawn=$(kty_spawn_oswin "$first_cwd" "$first_cmd" "$first_title")
     target_win_id="${spawn% *}"
@@ -256,11 +248,11 @@ provision_kitty_window() {
   local pair
   for pair in "$@"; do
     parse_pair "$pair"
-    found=$(kty_find_tab "$__cwd" "$__cmd")
+    found=$(kty_find_tab "$__title")
     if [ -n "$found" ]; then
-      echo "  tab already open elsewhere, skipping: $__cwd  (\$ ${__cmd:-<shell>})"
+      echo "  tab '$__title' already open elsewhere, skipping"
     else
-      echo "  adding tab: $__cwd  (\$ ${__cmd:-<shell>})"
+      echo "  adding tab '$__title'  (\$ ${__cmd:-<shell>})"
       kty_add_tab "$target_win_id" "$__cwd" "$__cmd" "$__title"
     fi
   done
@@ -277,11 +269,5 @@ provision_kitty_window "Term" \
   "$HOME|dashboard-daemon|dashboard-daemon" \
   "$HOME/Code/dashboard|just dev|dashboard: dev" \
   "$HOME/Code/dashboard|just daemon|dashboard: daemon"
-
-provision_kitty_window "AI3" \
-  "$HOME/Code/karaconnect/ecosystem||ecosystem"
-
-provision_kitty_window "AI1" \
-  "$HOME/Code/dashboard||dashboard"
 
 echo "Done."
