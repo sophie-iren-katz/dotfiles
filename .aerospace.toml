@@ -42,6 +42,27 @@ if.app-id = 'com.apple.finder'
 check-further-callbacks = false
 run = ['layout floating']
 
+# Workspace placement rules — keep in sync with bin/workspace-setup.
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = ['move-node-to-workspace Chat']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['move-node-to-workspace Chat']
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = ['move-node-to-workspace Spotify']
+
+[[on-window-detected]]
+if.app-id = 'com.dashboard.desktop'
+run = ['move-node-to-workspace Org']
+
+[[on-window-detected]]
+if.app-id = 'com.electron.dockerdesktop'
+run = ['move-node-to-workspace Docker']
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
