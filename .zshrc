@@ -30,11 +30,6 @@ if [[ -d /opt/homebrew ]]; then
     export PKG_CONFIG_PATH="/opt/homebrew/opt/pkg-config/lib/pkgconfig:/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 fi
 
-# NVM (mostly commented out for performance)
-export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use --lts >/dev/null  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Node.JS
 export NODE_OPTIONS="--max-old-space-size=8192"
 
