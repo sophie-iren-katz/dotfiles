@@ -34,6 +34,7 @@ case "${1}" in
         # Make directories if needed
         mkdir -p "${DOTFILES_DIR}/.config/kitty"
         mkdir -p "${DOTFILES_DIR}/.config/mpv"
+        mkdir -p "${DOTFILES_DIR}/.config/tmux"
         mkdir -p "${DOTFILES_DIR}/.zsh"
         mkdir -p "${DOTFILES_DIR}/.zsh/completions"
 
@@ -48,11 +49,13 @@ case "${1}" in
         cp -v "${HOME}/.config/kitty/notification_watcher.py" "${DOTFILES_DIR}/.config/kitty/notification_watcher.py"
         cp -v "${HOME}/.config/mpv/mpv.conf" "${DOTFILES_DIR}/.config/mpv/mpv.conf"
         cp -v "${HOME}/.config/starship.toml" "${DOTFILES_DIR}/.config/starship.toml"
+        cp -v "${HOME}/.config/tmux/tmux.conf" "${DOTFILES_DIR}/.config/tmux/tmux.conf"
         cp -v "${HOME}/.zsh/bitch.zsh" "${DOTFILES_DIR}/.zsh/bitch.zsh"
         cp -v "${HOME}/.zsh/claude.zsh" "${DOTFILES_DIR}/.zsh/claude.zsh"
         cp -v "${HOME}/.zsh/dotfiles.zsh" "${DOTFILES_DIR}/.zsh/dotfiles.zsh"
         cp -v "${HOME}/.zsh/git.zsh" "${DOTFILES_DIR}/.zsh/git.zsh"
         cp -v "${HOME}/.zsh/kitty.zsh" "${DOTFILES_DIR}/.zsh/kitty.zsh"
+        cp -v "${HOME}/.zsh/tmux.zsh" "${DOTFILES_DIR}/.zsh/tmux.zsh"
         cp -v "${HOME}/.zsh/completions/_gadd" "${DOTFILES_DIR}/.zsh/completions/_gadd"
         cp -v "${HOME}/.zsh/completions/_gsta" "${DOTFILES_DIR}/.zsh/completions/_gsta"
         cp -v "${HOME}/.zsh/completions/_gsub" "${DOTFILES_DIR}/.zsh/completions/_gsub"
@@ -72,6 +75,7 @@ case "${1}" in
         # Make directories if needed
         mkdir -p "${HOME}/.config/kitty"
         mkdir -p "${HOME}/.config/mpv"
+        mkdir -p "${HOME}/.config/tmux"
         mkdir -p "${HOME}/.zsh"
         mkdir -p "${HOME}/.zsh/completions"
 
@@ -86,11 +90,13 @@ case "${1}" in
         cp -v "${DOTFILES_DIR}/.config/kitty/notification_watcher.py" "${HOME}/.config/kitty/notification_watcher.py"
         cp -v "${DOTFILES_DIR}/.config/mpv/mpv.conf" "${HOME}/.config/mpv/mpv.conf"
         cp -v "${DOTFILES_DIR}/.config/starship.toml" "${HOME}/.config/starship.toml"
+        cp -v "${DOTFILES_DIR}/.config/tmux/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
         cp -v "${DOTFILES_DIR}/.zsh/bitch.zsh" "${HOME}/.zsh/bitch.zsh"
         cp -v "${DOTFILES_DIR}/.zsh/claude.zsh" "${HOME}/.zsh/claude.zsh"
         cp -v "${DOTFILES_DIR}/.zsh/dotfiles.zsh" "${HOME}/.zsh/dotfiles.zsh"
         cp -v "${DOTFILES_DIR}/.zsh/git.zsh" "${HOME}/.zsh/git.zsh"
         cp -v "${DOTFILES_DIR}/.zsh/kitty.zsh" "${HOME}/.zsh/kitty.zsh"
+        cp -v "${DOTFILES_DIR}/.zsh/tmux.zsh" "${HOME}/.zsh/tmux.zsh"
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gadd" "${HOME}/.zsh/completions/_gadd"
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gsta" "${HOME}/.zsh/completions/_gsta"
         cp -v "${DOTFILES_DIR}/.zsh/completions/_gsub" "${HOME}/.zsh/completions/_gsub"
