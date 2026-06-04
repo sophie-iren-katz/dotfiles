@@ -56,6 +56,7 @@ fi
 . ~/.zsh/dotfiles.zsh
 . ~/.zsh/git.zsh
 . ~/.zsh/kitty.zsh
+. ~/.zsh/tmux.zsh
 
 # Path
 export PATH="$HOME/.maestro/bin:/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:/opt/mysql/bin:${PATH}"
