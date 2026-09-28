@@ -48,6 +48,9 @@ export POETRY_VIRTUALENVS_IN_PROJECT=1
 # Aliases
 if command -v eza >/dev/null 2>&1; then
     alias ls='eza'
+    alias lt1='eza -T -L 1'
+    alias lt2='eza -T -L 2'
+    alias ltd='eza -T'
 fi
 
 # Additional scripts
@@ -100,6 +103,8 @@ export CTRL_NO_OPEN=1
 
 # zoxide (must be last)
 if command -v zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init zsh --cmd cd)"
     export _ZO_DOCTOR=0
+    eval "$(zoxide init zsh --cmd cd)"
 fi
+
+alias iren='bun run "/Users/sophie/Code/iren-v2/cli/index.ts"'

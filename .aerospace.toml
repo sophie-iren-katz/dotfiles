@@ -56,12 +56,28 @@ if.app-id = 'com.spotify.client'
 run = ['move-node-to-workspace Spotify']
 
 [[on-window-detected]]
-if.app-id = 'com.dashboard.desktop'
+if.app-id = 'com.iren.desktop'
 run = ['move-node-to-workspace Org']
 
 [[on-window-detected]]
 if.app-id = 'com.electron.dockerdesktop'
 run = ['move-node-to-workspace Docker']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Notes'
+run = ['move-node-to-workspace Org']
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = ['move-node-to-workspace AI']
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = ['move-node-to-workspace WebP']
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.datagrip'
+run = ['move-node-to-workspace DB']
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -149,25 +165,25 @@ alt-equal = 'resize smart +50'
 ctrl-alt-space = 'fullscreen'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-0 = 'workspace C1'
+alt-0 = 'workspace Code1'
 alt-1 = 'workspace Chat'
-alt-2 = 'workspace Term'
+alt-2 = 'workspace AI'
 alt-3 = 'workspace Org'
 alt-4 = 'workspace Spotify'
 alt-5 = 'workspace Media'
 alt-6 = 'workspace DB'
 alt-7 = 'workspace Docker'
-alt-8 = 'workspace C3'
-alt-9 = 'workspace C2'
+alt-8 = 'workspace Code3'
+alt-9 = 'workspace Code2'
 alt-a = 'workspace A'
 alt-b = 'workspace B'
 alt-e = 'workspace Reading'
 alt-g = 'workspace G'
-alt-i = 'workspace AI3'
+alt-i = 'workspace Term3'
 alt-m = 'workspace M'
 alt-n = 'workspace N'
-alt-o = 'workspace AI2'
-alt-p = 'workspace AI1'
+alt-o = 'workspace Term2'
+alt-p = 'workspace Term1'
 alt-q = 'workspace WebP'
 alt-r = 'workspace R'
 alt-t = 'workspace T'
@@ -179,25 +195,25 @@ alt-y = 'workspace Y'
 alt-z = 'workspace Z'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-alt-shift-0 = 'move-node-to-workspace C1'
+alt-shift-0 = 'move-node-to-workspace Code1'
 alt-shift-1 = 'move-node-to-workspace Chat'
-alt-shift-2 = 'move-node-to-workspace Term'
+alt-shift-2 = 'move-node-to-workspace AI'
 alt-shift-3 = 'move-node-to-workspace Org'
 alt-shift-4 = 'move-node-to-workspace Spotify'
 alt-shift-5 = 'move-node-to-workspace Media'
 alt-shift-6 = 'move-node-to-workspace DB'
 alt-shift-7 = 'move-node-to-workspace Docker'
-alt-shift-8 = 'move-node-to-workspace C3'
-alt-shift-9 = 'move-node-to-workspace C2'
+alt-shift-8 = 'move-node-to-workspace Code3'
+alt-shift-9 = 'move-node-to-workspace Code2'
 alt-shift-a = 'move-node-to-workspace A'
 alt-shift-b = 'move-node-to-workspace B'
 alt-shift-e = 'move-node-to-workspace Reading'
 alt-shift-g = 'move-node-to-workspace G'
-alt-shift-i = 'move-node-to-workspace AI3'
+alt-shift-i = 'move-node-to-workspace Term3'
 alt-shift-m = 'move-node-to-workspace M'
 alt-shift-n = 'move-node-to-workspace N'
-alt-shift-o = 'move-node-to-workspace AI2'
-alt-shift-p = 'move-node-to-workspace AI1'
+alt-shift-o = 'move-node-to-workspace Term2'
+alt-shift-p = 'move-node-to-workspace Term1'
 alt-shift-q = 'move-node-to-workspace WebP'
 alt-shift-r = 'move-node-to-workspace R'
 alt-shift-t = 'move-node-to-workspace T'
