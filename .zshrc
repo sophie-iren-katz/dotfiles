@@ -108,3 +108,8 @@ if command -v zoxide >/dev/null 2>&1; then
 fi
 
 alias iren='bun run "/Users/sophie/Code/iren-v2/cli/index.ts"'
+
+# Homebrew node@24 is keg-only; expose node/npm/npx (also needed by npx-launched MCP servers)
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
+
+alias mpv='iren mpv run'
