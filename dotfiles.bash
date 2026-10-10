@@ -61,6 +61,13 @@ case "${1}" in
         cp -v "${HOME}/.zsh/completions/_gsub" "${DOTFILES_DIR}/.zsh/completions/_gsub"
         cp -v "${HOME}/.zsh/completions/_gunadd" "${DOTFILES_DIR}/.zsh/completions/_gunadd"
 
+        # Snapshot installed Homebrew packages
+        if ! command -v brew > /dev/null 2>&1; then
+            echo "error: brew is required to refresh ${DOTFILES_DIR}/Brewfile"
+            exit 1
+        fi
+        brew bundle dump --file "${DOTFILES_DIR}/Brewfile" --force
+
         # Notify the user what to do next
         echo
         echo "$ cd ${DOTFILES_DIR}"
