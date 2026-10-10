@@ -8,7 +8,8 @@ $ git clone https://github.com/sophie-iren-katz/dotfiles.git ~/.dotfiles
 
 # Save dotfiles from my local filesystem into this repository
 #
-# Do this after making a change
+# Do this after making a change. Also refreshes the Brewfile from what's
+# installed (requires brew).
 $ cd ~/.dotfiles
 $ ./dotfiles.bash save
 $ git add -A .
@@ -20,23 +21,14 @@ $ git push
 # Do this when setting up a new machine
 $ cd ~/.dotfiles
 $ ./dotfiles.bash load
+
+# Install Homebrew packages from the Brewfile
+#
+# Also a new-machine step; load does not install packages
+$ brew bundle --file ~/.dotfiles/Brewfile
 ```
 
-## Crontab
+## Automatic backup
 
-`crontab.txt` holds the scheduled jobs for this machine (currently the hourly
-`~/.claude/backup.sh` run). It's the source of truth — edit the file, then
-install it with:
-
-```shell
-$ crontab ~/.dotfiles/crontab.txt
-
-# Verify what's installed
-$ crontab -l
-```
-
-To capture the currently-installed crontab back into the repo before editing:
-
-```shell
-$ crontab -l > ~/.dotfiles/crontab.txt
-```
+The iren daemon's `backup-dotfiles` job runs `./dotfiles.bash save`, then
+commits and pushes, once a day.
