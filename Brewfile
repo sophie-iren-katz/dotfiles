@@ -17,12 +17,16 @@ brew "cmake"
 brew "openssl@3", link: true
 # Dependency manager for Cocoa projects
 brew "cocoapods"
+# Secure runtime for JavaScript and TypeScript
+brew "deno"
 # Generate documentation for several programming languages
 brew "doxygen"
 # Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
 # GNU compiler collection
 brew "gcc"
 # Text-based UI library
@@ -51,6 +55,8 @@ brew "livekit"
 brew "lld"
 # Fast and user friendly build system
 brew "meson"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
 # Media player based on MPlayer and mplayer2
 brew "mpv"
 # Open source relational database management system
