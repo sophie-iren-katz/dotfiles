@@ -62,7 +62,7 @@ fi
 . ~/.zsh/tmux.zsh
 
 # Path
-export PATH="$HOME/.maestro/bin:/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:/opt/mysql/bin:${PATH}"
+export PATH="$HOME/.maestro/bin:/usr/local/go/bin:$(go env GOPATH)/bin:/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/mysql-client/bin:${PATH}"
 
 if command -v brew >/dev/null 2>&1; then
     export PATH="$(brew --prefix)/opt/python@3.11/libexec/bin:${PATH}"
