@@ -7,6 +7,8 @@ tap "shaharia-lab/tap", trusted: true
 brew "awscli"
 # Bash Automated Testing System
 brew "bats-core"
+# Get/set bluetooth power and discoverable state
+brew "blueutil"
 # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
 brew "clang-format"
 # Tool for emulating mouse and keyboard events
