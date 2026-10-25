@@ -3,6 +3,7 @@ tap "hashicorp/tap", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "pulumi/tap", trusted: true
 tap "shaharia-lab/tap", trusted: true
+tap "symbioose/tap", "https://github.com/Symbioose/homebrew-tap", trusted: { casks: ["claude-switcher"] }
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Bash Automated Testing System
