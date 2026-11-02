@@ -55,8 +55,11 @@ run = ['move-node-to-workspace Chat']
 if.app-id = 'com.spotify.client'
 run = ['move-node-to-workspace Spotify']
 
+# By name, not app-id: the `tauri dev` binary embeds no CFBundleIdentifier,
+# so it has no bundle id. Its name is "iren-desktop" or "Iren"; the regex
+# matches either, since AeroSpace compiles it case-insensitively.
 [[on-window-detected]]
-if.app-id = 'com.iren.desktop'
+if.app-name-regex-substring = '^iren(-desktop)?$'
 run = ['move-node-to-workspace Org']
 
 [[on-window-detected]]
